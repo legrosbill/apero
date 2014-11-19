@@ -32,6 +32,38 @@ a{
 	color: inherit;
 	text-decoration: none;
 }
+.hidden{display:none;}
+
+.screen{
+	position: fixed;
+	top:0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	overflow-y: auto;
+	background-color: #fff;
+	-webkit-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+}
+
+.screen > h2{
+	font-size: 1.5em;
+	padding: .5em;
+	text-align: center;
+	background-color: fuchsia;
+	color: #fff;
+}
+
+.off-screen{
+	-webkit-transform: translateX(100%);
+	transform:translateX(100%)
+}
+#contacts-viewer{
+	z-index: 0;
+}
+#message-interface{
+	z-index: 5;
+}
 #contacts-list {
 	margin : 0;
 	padding: 0;
@@ -115,3 +147,4 @@ a{
 
 
 }
+#location-preview{padding-top:50%}

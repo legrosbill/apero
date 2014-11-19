@@ -30,44 +30,34 @@
     </head>
     <body>
         <div class="app">
-            <h1>Apache Cordova</h1>
-            <main id="contacts-viewer">
-				<ul id="contacts-list">
-					<li>
-						<a class="contact" href="#0">Contact n°1</a>
-						<label class="check" for="contact-1">
-							<input id="contact-1" name="contact[]" type="checkbox" />
-						</label>
-					</li>
-					<li>
-						<a class="contact" href="#0">Contact n°2</a>
-						<label class="check" for="contact-2">
-							<input id="contact-2" name="contact[]" type="checkbox" />
-						</label>
-					</li>
-					<li>
-						<a class="contact" href="#0">Contact n°3</a>
-						<label class="check" for="contact-3">
-							<input id="contact-3" name="contact[]" type="checkbox" />
-						</label>
-					</li>
-					<li>
-						<a class="contact" href="#0">Contact n°4</a>
-						<label class="check" for="contact-4">
-							<input id="contact-4" name="contact[]" type="checkbox" />
-						</label>
-					</li>
-					<li>
-						<a class="contact" href="#0">Contact n°5</a>
-						<label class="check" for="contact-5">
-							<input id="contact-5" name="contact[]" type="checkbox" />
-						</label>
-					</li>
-				</ul>
+            <main id="contacts-viewer" class="screen">
+				<h1>Apéro !</h1>
+				<h2>choisissez vos contacts</h2>
+				<ul id="contacts-list"></ul>
 				<div id="contacts-list-validator">
 					<button id="contacts-list-validate">Valider</button>
 				</div>
 			</main>
+			<div id="message-interface" class="screen off-screen">
+				<h1>Envoyez votre message</h1>
+				<div>
+					<div>
+						<h2>localisation</h2>
+						<button id="get-location"></button>
+						<div id="location-preview"></div>
+					</div>
+					<div>
+						<h2>message</h2>
+						<button id="get-message">Message par défaut</button>
+						<textarea cols="50" rows="5" id="message-zone"></textarea>
+					</div>
+					<div>
+						<h2>photo</h2>
+						<button id="get-picture"></button>
+						<div id="picture-preview"></div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<script type="text/javascript" src="cordova.js"></script>
 		<script type="text/javascript" src="js/prototypes.js"></script>

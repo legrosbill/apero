@@ -1,4 +1,8 @@
-String.prototype.sanityze = function () {
-	return this.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quote;');
+String.prototype.htmlEntities = function () {
+	return this
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;');
 }
 

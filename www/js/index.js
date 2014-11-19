@@ -20,12 +20,14 @@ var app = {
 	isPhoneGapApp: !!window.cordova,
 	defaultContents: {
 		contacts: [
-			{id: "12", displayName: "Toto", nickname: "toto", photos: []},
+			{id: "12", displayName: "Toto \"test\"", nickname: "toto", photos: []},
 			{id: "25", nickname: "titi", photos: []},
-			{id: "29", name: {formatted: "Tata"}, photos: []},
+			{id: "29", name: {formatted: "<Tata>"}, photos: []},
 			{id: "36", displayName: "Tata", photos: [{type: "url", value: "https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/48.jpg"}]}
 		]
 	},
+	local_contacts: {},
+	selected_contacts: {},
 // Application Constructor
 	initialize: function () {
 		this.bindEvents();
@@ -41,11 +43,71 @@ var app = {
 		} else {
 			document.addEventListener('DOMContentLoaded', this.domContentReady, false);
 		}
+		document.getElementById("contacts-list-validate").addEventListener("click", app.onContactsListValidate, false);
+		document.getElementById("get-location").addEventListener("click", app.onGetLocation, false);
+		document.getElementById("get-message").addEventListener("click", app.onGetMessage, false);
+		document.getElementById("get-picture").addEventListener("click", app.onGetPicture, false);
 	},
-	// deviceready Event Handler
-	//
-	// The scope of 'this' is the event. In order to call the 'receivedEvent'
-	// function, we must explicitly call 'app.receivedEvent(...);'
+	onContactsListValidate: function () {
+		var checked_contacts = document.getElementById("contacts-list").querySelectorAll(".check>input[type=checkbox]:checked");
+		if (!checked_contacts) {
+			//TODO: alert toast
+			return false;
+		}
+		var selected_contacts = [];
+		Array.prototype.forEach.call(
+				checked_contacts, function (checkbox) {
+					var contact = app.local_contacts[checkbox.value];
+					if (!contact) {
+						return;
+					}
+					selected_contacts.push(contact);
+					console.log(checkbox.value, contact);
+				}
+		);
+		document.getElementById("message-interface").classList.remove("off-screen");
+		if (navigator.geolocation) {
+			app.startLocation();
+			document.getElementById("get-location").addEventListener("clich", app.startLocation, false);
+		} else {
+			console.error("Geolocalisation not supported");
+			document.getElementById("location-preview").parentNode.classList.addClass("hidden");
+		}
+	},
+	startLocation: function () {
+		navigator.geolocation.getCurrentPosition(
+				app.onLocationSuccess,
+				app.onLocationError,
+				{
+					enableHighAccuracy: false,
+					timeout: 10000,
+					maximumAge: 5000
+				}
+		);
+		}
+		onLocationSuccess: function (selected_contacts, position) {
+
+		console.log("test1");
+		var map = document.getElementById("location-preview");
+		map.classList.remove("hidden");
+		console.dir(position);
+		map.style.backgroundImage = "url(https://maps.googleapis.com/maps/api/staticmap?center=" + position.coords.latitude + "," + position.coords.longitude + "&zoom=12&size=" + map.offsetWidth + "x" + map.offsetHeight + "&maptype=roadmap&markers=color:green%7Clabel:A%7C" + position.coords.latitude + "," + position.coords.longitude + ")";
+	},
+	onLocationError: function (selected_contacts, error) {
+		document.getElementById("location-preview").classList.add("hidden");
+		console.error("Geolocalisation Fail", error);
+	},
+	onGetLocation: function () {
+
+	},
+	onGetMessage: function () {
+	},
+	onGetPicture: function () {
+	},
+// deviceready Event Handler
+//
+// The scope of 'this' is the event. In order to call the 'receivedEvent'
+// function, we must explicitly call 'app.receivedEvent(...);'
 	onDeviceReady: function () {
 		app.receivedEvent('deviceready');
 		var options = new ContactFindOptions();
@@ -70,7 +132,8 @@ var app = {
 		console.dir(contacts);
 		var contact_list = document.getElementById("contacts-list");
 		contact_list.innerHTML = "";
-		var contacts_str = new Array();
+		var contacts_str = [];
+		app.local_contacts = {};
 		contacts.forEach(function (contact) {
 			if (!contact.displayName
 					&& !contact.nickname
@@ -89,12 +152,13 @@ var app = {
 						break;
 				}
 			}
-			contacts_str.push("<h2>" + (contact.displayName || contact.nickname || contact.name.formatted) + "</h2>\
+			contacts_str.push("<h2>" + (contact.displayName || contact.nickname || contact.name.formatted).htmlEntities() + "</h2>\
 								</a>\
 								<label class=\"check\">\
-								 <input type=\"checkbox\" name=\"contact[" + contact.id + "]\" />\
+								 <input type=\"checkbox\" name=\"contact[" + contact.id + "]\" value=\"" + contact.id + "\"/>\
 								</label>\
 								</li>");
+			app.local_contacts[contact.id] = contact;
 		});
 		contact_list.innerHTML = contacts_str.join("");
 		var contacts_avatars = contact_list.querySelectorAll(".avatar");
