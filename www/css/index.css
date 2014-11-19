@@ -16,100 +16,102 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
-}
 
+}
+a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline;box-sizing:border-box}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #A7A7A7),
-        color-stop(0.51, #E4E4E4)
-    );
-    background-attachment:fixed;
-    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
-    font-size:12px;
-    height:100%;
-    margin:0px;
-    padding:0px;
-    text-transform:uppercase;
-    width:100%;
+	font-family: 'Roboto',sans-serif;
+}
+a{
+	color: inherit;
+	text-decoration: none;
+}
+#contacts-list {
+	margin : 0;
+	padding: 0;
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+
+}
+#contacts-list > li{
+
+	display: table-row;
+	list-style: none;
+	padding:  0.5em;
+	margin: 0;
+
+}#contacts-list > li > a:active{
+	background-color: blue;
+}
+#contacts-list > li+li > *{
+	border-top: 1px solid #ccc;
 }
 
-/* Portrait layout (default) */
-.app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
-    position:absolute;             /* position in the center of the screen */
-    left:50%;
-    top:50%;
-    height:50px;                   /* text area height */
-    width:225px;                   /* text area width */
-    text-align:center;
-    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
-                                   /* offset horizontal: half of text area width */
+#contacts-list > li > .contact{
+	display: table-cell;
+	padding: .5em;
+	margin-right: 2em;
+
 }
 
-/* Landscape layout (with min-width) */
-@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-    .app {
-        background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
-    }
-}
+#contacts-list > li > .contact >.avatar{
+	height: 3em;
+	width: 3em;
+	border-radius: 50%;
+	margin-right: 0.5em;
+	float:left;
 
-h1 {
-    font-size:24px;
-    font-weight:normal;
-    margin:0px;
-    overflow:visible;
-    padding:0px;
-    text-align:center;
 }
+#contacts-list > li > .check{
+	display: table-cell;
+	padding: .5em;
+	width: 2em;
+	text-align: center;
+	background-color: green;
+	vertical-align: middle;
 
-.event {
-    border-radius:4px;
-    -webkit-border-radius:4px;
-    color:#FFFFFF;
-    font-size:12px;
-    margin:0px 30px;
-    padding:2px 0px;
 }
+#contacts-list > li > .check > input[type="checkbox"]{
+	-webkit-appearance: none;
+	display: inline-block;
+	margin: 0;
+	width:1em;
+	height:1em;
+	background-color: #fff;
+	font-size: 1em;
+	border-radius: 0.25em;
+}
+#contacts-list > li > .check > input[type="checkbox"]:checked{
+	background-color: blueviolet;
+}
+#contacts-list > li > .check > input[type="checkbox"]:focus{
+	outline: none;
+}
+#contacts-list-validator {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	text-align: center;
+	background: cyan;
+	width: 100%;
+	height: 3em;
+}
+#contacts-list-validate {
+	-webkit-appearance: none;
+	margin: 0;
+	padding: 0.5em;
+	background-color: yellow;
+	border: none;
+	display: block;
+	width: 100%;
+	font-size: 1.5em;
 
-.event.listening {
-    background-color:#333333;
-    display:block;
-}
 
-.event.received {
-    background-color:#4B946A;
-    display:none;
-}
-
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
 }

@@ -6,5 +6,12 @@
     "pkgName":"pro.hebergeur.apero",
     "icons": {
         "128": "/img/logo.png"
-    }
+    },
+	"type": "privileged",
+	"permissions": {
+	    "contacts": {
+		    "access": "readwrite",
+			"description": "Describe why there is a need for such permission"
+		}
+	}
 }
