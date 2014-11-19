@@ -84,16 +84,14 @@ var app = {
 					maximumAge: 5000
 				}
 		);
-		}
-		onLocationSuccess: function (selected_contacts, position) {
-
-		console.log("test1");
+	},
+	onLocationSuccess: function (position) {
 		var map = document.getElementById("location-preview");
 		map.classList.remove("hidden");
 		console.dir(position);
 		map.style.backgroundImage = "url(https://maps.googleapis.com/maps/api/staticmap?center=" + position.coords.latitude + "," + position.coords.longitude + "&zoom=12&size=" + map.offsetWidth + "x" + map.offsetHeight + "&maptype=roadmap&markers=color:green%7Clabel:A%7C" + position.coords.latitude + "," + position.coords.longitude + ")";
 	},
-	onLocationError: function (selected_contacts, error) {
+	onLocationError: function (error) {
 		document.getElementById("location-preview").classList.add("hidden");
 		console.error("Geolocalisation Fail", error);
 	},
@@ -166,7 +164,7 @@ var app = {
 				contacts_avatars, function (img) {
 					img.onerror = function () {
 						img.parentNode.removeChild(img);
-					}
+					};
 				}
 		);
 	},
