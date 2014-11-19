@@ -65,7 +65,7 @@ a{
 	z-index: 5;
 }
 #contacts-list {
-	margin : 0;
+	margin : 0 0 2em;
 	padding: 0;
 	display: table;
 	width: 100%;

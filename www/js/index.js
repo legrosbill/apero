@@ -21,7 +21,7 @@ var app = {
 	defaultContents: {
 		contacts: [
 			{id: "12", displayName: "Toto \"test\"", nickname: "toto", photos: []},
-			{id: "25", nickname: "titi", photos: []},
+			{id: "25", nickname: "titi", photos: [], phoneNumbers: [{type: "mobile", value: "0699346538"}]},
 			{id: "29", name: {formatted: "<Tata>"}, photos: []},
 			{id: "36", displayName: "Tata", photos: [{type: "url", value: "https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/48.jpg"}]}
 		]
@@ -73,6 +73,9 @@ var app = {
 			console.error("Geolocalisation not supported");
 			document.getElementById("location-preview").parentNode.classList.addClass("hidden");
 		}
+
+		console.log("liste envoyee", selected_contacts);
+		document.getElementById("message-validate").onclick = app.sendSMStoContacts.bind(null, selected_contacts);
 	},
 	startLocation: function () {
 		navigator.geolocation.getCurrentPosition(
@@ -90,13 +93,13 @@ var app = {
 		map.classList.remove("hidden");
 		console.dir(position);
 		map.style.backgroundImage = "url(https://maps.googleapis.com/maps/api/staticmap?center=" + position.coords.latitude + "," + position.coords.longitude + "&zoom=12&size=" + map.offsetWidth + "x" + map.offsetHeight + "&maptype=roadmap&markers=color:green%7Clabel:A%7C" + position.coords.latitude + "," + position.coords.longitude + ")";
+		map.dataset.latitude = position.coords.latitude;
+		map.dataset.longitude = position.coords.longitude;
+
 	},
 	onLocationError: function (error) {
 		document.getElementById("location-preview").classList.add("hidden");
 		console.error("Geolocalisation Fail", error);
-	},
-	onGetLocation: function () {
-
 	},
 	onGetMessage: function () {
 	},
@@ -150,7 +153,17 @@ var app = {
 						break;
 				}
 			}
-			contacts_str.push("<h2>" + (contact.displayName || contact.nickname || contact.name.formatted).htmlEntities() + "</h2>\
+			var phone = "";
+			if (contact.phoneNumbers && contact.phoneNumbers.forEach) {
+				contact.phoneNumbers.forEach(function (number) {
+					if (number.type !== "mobile") {
+						return;
+					}
+					phone = number.value;
+				});
+
+			}
+			contacts_str.push("<h2>" + (contact.displayName || contact.nickname || contact.name.formatted).htmlEntities() + "(" + phone + ")</h2>\
 								</a>\
 								<label class=\"check\">\
 								 <input type=\"checkbox\" name=\"contact[" + contact.id + "]\" value=\"" + contact.id + "\"/>\
@@ -170,6 +183,45 @@ var app = {
 	},
 	onContactFoundError: function (id) {
 		console.log('onContactFoundErrort: ' + id);
+	},
+	sendSMStoContacts: function (selected_contacts) {
+		console.log("liste des contacts", selected_contacts);
+		var map = document.getElementById("location-preview");
+		if (!map.classList.contains("hidden") && !map.parentNode.classList.contains("hidden")) {
+			var location = map.dataset;
+		}
+		var message = document.getElementById("message-zone").value;
+		console.log(message, location);
+		var numbers = [];
+		selected_contacts.forEach(function (contact) {
+			if (!contact.phoneNumbers || !contact.phoneNumbers.forEach) {
+				return;
+			}
+			var phone = "";
+			contact.phoneNumbers.forEach(function (number) {
+				if (number.type !== "mobile") {
+					return;
+				}
+				phone = number.value;
+			});
+			if (phone) {
+				numbers.push(phone);
+			}
+		});
+		if (!SMS) {
+			alert("SMS plugin not ready");
+			return;
+		}
+		SMS.sendSMS(
+				numbers,
+				message,
+				function () {
+					console.info("SMS sent");
+				},
+				function (error) {
+					console.error(error);
+				}
+		);
 	}
 };
 app.initialize();
